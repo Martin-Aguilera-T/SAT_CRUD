@@ -1,17 +1,51 @@
-CREATE TABLE Cliente (
+-- Tablas de Catálogos obligatorias
+CREATE TABLE Estado (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    nombre TEXT NOT NULL
+);
+
+CREATE TABLE Municipio (
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    estadoId INTEGER NOT NULL,
     nombre TEXT NOT NULL,
-    limite_credito REAL NOT NULL
+    FOREIGN KEY (estadoId) REFERENCES Estado(id)
 );
 
-CREATE TABLE Credito (
+-- Tabla de Contribuyentes SAT
+CREATE TABLE Contribuyente (
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    cliente_id INTEGER NOT NULL,
-    monto_prestado REAL NOT NULL,
-    saldo_pendiente REAL NOT NULL,
-    FOREIGN KEY (cliente_id) REFERENCES Cliente(id)
+    rfc TEXT NOT NULL UNIQUE,
+    tipoPersona TEXT NOT NULL,
+    regimenFiscal TEXT NOT NULL,
+    estadoId INTEGER NOT NULL,
+    municipioId INTEGER NOT NULL,
+    FOREIGN KEY (estadoId) REFERENCES Estado(id),
+    FOREIGN KEY (municipioId) REFERENCES Municipio(id)
 );
+-- Consultas para el Filtrado Dinámico y CRUD
+getEstados:
+SELECT * FROM Estado;
 
--- Una consulta simple para que el generador trabaje
-obtenerClientes:
-SELECT * FROM Cliente;
+getMunicipiosByEstado:
+SELECT * FROM Municipio WHERE estadoId = :estadoId;
+
+getContribuyentes:
+SELECT * FROM Contribuyente;
+
+insertContribuyente:
+INSERT INTO Contribuyente(rfc, tipoPersona, regimenFiscal, estadoId, municipioId)
+VALUES (:rfc, :tipoPersona, :regimenFiscal, :estadoId, :municipioId);
+
+updateContribuyente:
+UPDATE Contribuyente
+SET rfc = :rfc, tipoPersona = :tipoPersona, regimenFiscal = :regimenFiscal, estadoId = :estadoId, municipioId = :municipioId
+WHERE id = :id;
+
+deleteContribuyente:
+DELETE FROM Contribuyente WHERE id = :id;
+
+insertEstado:
+INSERT INTO Estado(nombre) VALUES (:nombre);
+
+insertMunicipio:
+INSERT INTO Municipio(estadoId, nombre) VALUES (:estadoId, :nombre);
