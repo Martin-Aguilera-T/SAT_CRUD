@@ -58,4 +58,21 @@ class ContribuyenteRepository(database: AppDatabase) {
             queries.insertMunicipio(estadoId = 2L, nombre = "San Juan del Río")
         }
     }
+    suspend fun actualizar(
+        id: Long,
+        rfc: String,
+        tipoPersona: String,
+        regimenFiscal: String,
+        estadoId: Long,
+        municipioId: Long
+    ) = withContext(Dispatchers.Default) {
+        queries.updateContribuyente(
+            id = id,
+            rfc = rfc,
+            tipoPersona = tipoPersona,
+            regimenFiscal = regimenFiscal,
+            estadoId = estadoId,
+            municipioId = municipioId
+        )
+    }
 }

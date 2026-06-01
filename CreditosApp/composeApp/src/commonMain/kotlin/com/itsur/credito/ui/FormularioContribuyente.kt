@@ -136,7 +136,7 @@ fun FormularioContribuyente(viewModel: ContribuyenteViewModel) {
             enabled = rfc.isNotBlank() && estadoSeleccionado != null && municipioSeleccionado != null,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Guardar Contribuyente")
+            Text("Guardar")
         }
     }
 }
